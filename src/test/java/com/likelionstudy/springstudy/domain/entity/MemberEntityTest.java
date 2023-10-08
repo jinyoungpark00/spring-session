@@ -21,7 +21,6 @@ public class MemberEntityTest {
         MemberEntity member = MemberEntity.builder()
                 .username("park")
                 .nickname("jinjin")
-                .password("123123jddi")
                 .build();
         memberJpaRepository.save(member);
         //when

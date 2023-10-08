@@ -1,22 +1,19 @@
 package com.likelionstudy.springstudy.domain.entity;
 
+import com.likelionstudy.springstudy.domain.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import static jakarta.persistence.GenerationType.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter @Setter
+@Getter
 @Table(name = "letter")
-public class LetterEntity {
+public class LetterEntity extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)
@@ -25,15 +22,17 @@ public class LetterEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private String photo_url;
+//    @Column
+//    private String photo_url;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime created_at;
-
-    // box 연결 1:1
-    @ManyToOne
+    // box 연결 N:1 (N쪽이 연관관계의 주인 : box에 대한 정보를 들고 있음(box_id)) -> 단방향 연관관계
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "box_id")
     private BoxEntity box;
+
+    @Builder
+    public LetterEntity(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }
